@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Nomadic Lab is an independent technology and product studio building practical AI-powered products - AI productivity tools, developer solutions, travel and everyday-life applications.">
+<meta name="theme-color" content="#F5F7F9">
+<meta property="og:title" content="Nomadic Lab - AI Projects">
+<meta property="og:description" content="An independent technology and product studio building practical AI-powered products that solve real-world problems.">
+<meta property="og:type" content="website">
+<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Nomadic Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+
+<style>
+/* ============================================================
+   NOMADIC LAB — design tokens
+   Palette derived from the studio mark: navy reticle, slate
+   ticks, coral nodes, cool off-white ground.
+   ============================================================ */
+:root{
+  --ground:#F5F7F9;
+  --ground-2:#EDF1F5;
+  --surface:#FFFFFF;
+  --ink:#0E1726;
+  --ink-2:#31415A;
+  --muted:#5B6E8C;
+  --navy:#1A365D;
+  --navy-soft:#E4EAF3;
+  --coral:#FF6B35;
+  --coral-ink:#C63F0E;
+  --coral-soft:#FFEDE5;
+  --line:#DCE2EA;
+  --line-strong:#C3CDDA;
+  --ok:#0F7A5A;
+  --ok-soft:#DFF3EC;
+  --grid:rgba(26,54,93,.055);
+  --ring:rgba(255,107,53,.45);
+  --shadow:0 1px 2px rgba(14,23,38,.05), 0 12px 32px -18px rgba(14,23,38,.28);
+
+  --f-display:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+
+  --col:1140px;
+  --pad:clamp(20px,5vw,48px);
+  --s-sec:clamp(72px,10vw,124px);
+}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0A0F17;
+    --ground-2:#101822;
+    --surface:#121A26;
+    --ink:#E8EEF6;
+    --ink-2:#B9C7D9;
+    --muted:#8FA2BC;
+    --navy:#8FB4E2;
+    --navy-soft:#1A2739;
+    --coral:#FF8055;
+    --coral-ink:#FF9A76;
+    --coral-soft:#2A1A14;
+    --line:#22303F;
+    --line-strong:#33455A;
+    --ok:#48C7A0;
+    --ok-soft:#0E2A23;
+    --grid:rgba(143,180,226,.07);
+    --ring:rgba(255,128,85,.5);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 16px 40px -22px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0A0F17;
+  --ground-2:#101822;
+  --surface:#121A26;
+  --ink:#E8EEF6;
+  --ink-2:#B9C7D9;
+  --muted:#8FA2BC;
+  --navy:#8FB4E2;
+  --navy-soft:#1A2739;
+  --coral:#FF8055;
+  --coral-ink:#FF9A76;
+  --coral-soft:#2A1A14;
+  --line:#22303F;
+  --line-strong:#33455A;
+  --ok:#48C7A0;
+  --ok-soft:#0E2A23;
+  --grid:rgba(143,180,226,.07);
+  --ring:rgba(255,128,85,.5);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 16px 40px -22px rgba(0,0,0,.8);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:16px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* faint coordinate grid — the studio's "working surface" */
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size:64px 64px;
+  mask-image:linear-gradient(to bottom, #000 0, #000 62vh, transparent 96vh);
+  -webkit-mask-image:linear-gradient(to bottom, #000 0, #000 62vh, transparent 96vh);
+}
+
+h1,h2,h3,h4{font-family:var(--f-display);margin:0;line-height:1.06;letter-spacing:-.02em;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+img,svg{max-width:100%}
+
+.wrap{width:100%;max-width:var(--col);margin-inline:auto;padding-inline:var(--pad);position:relative;z-index:1}
+
+:where(a,button,input,select,textarea,summary):focus-visible{
+  outline:2px solid var(--coral);
+  outline-offset:3px;
+  border-radius:3px;
+}
+
+.skip{
+  position:absolute;left:-9999px;top:0;z-index:100;
+  background:var(--ink);color:var(--ground);
+  padding:12px 18px;font-family:var(--f-mono);font-size:13px;
+}
+.skip:focus{left:12px;top:12px}
+
+/* ---------- shared bits ---------- */
+.eyebrow{
+  display:flex;align-items:center;gap:10px;
+  font-family:var(--f-mono);font-size:12px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--muted);
+  margin:0 0 20px;
+}
+.eyebrow svg{flex:none;color:var(--coral)}
+
+.lede{font-size:clamp(16.5px,1.6vw,18.5px);color:var(--ink-2);max-width:62ch}
+
+.sec{padding-block:var(--s-sec);position:relative}
+.sec + .sec{border-top:1px solid var(--line)}
+
+.sec-head{display:grid;gap:18px;max-width:66ch;margin-bottom:clamp(36px,5vw,56px)}
+.sec-head h2{font-size:clamp(30px,4.4vw,46px);font-weight:800}
+
+/* reticle corner ticks — the mark's crosshair, used as framing */
+.ticked{position:relative}
+.ticked::before,.ticked::after{
+  content:"";position:absolute;width:11px;height:11px;pointer-events:none;
+  border-color:var(--line-strong);border-style:solid;border-width:0;
+}
+.ticked::before{top:-1px;left:-1px;border-top-width:2px;border-left-width:2px}
+.ticked::after{bottom:-1px;right:-1px;border-bottom-width:2px;border-right-width:2px}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:-.01em;
+  padding:14px 24px;border:1px solid transparent;border-radius:2px;
+  text-decoration:none;cursor:pointer;
+  transition:background .18s ease,color .18s ease,border-color .18s ease,transform .18s ease;
+}
+.btn-primary{background:var(--ink);color:var(--ground);}
+.btn-primary:hover{background:var(--coral);color:#fff}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line-strong)}
+.btn-ghost:hover{border-color:var(--ink);background:var(--surface)}
+.btn svg{flex:none;transition:transform .18s ease}
+.btn:hover svg{transform:translateX(3px)}
+
+/* ---------- header ---------- */
+.hdr{
+  position:sticky;top:0;z-index:40;
+  background:color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter:saturate(140%) blur(10px);
+  -webkit-backdrop-filter:saturate(140%) blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.hdr-in{display:flex;align-items:center;justify-content:space-between;gap:20px;height:70px}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;flex:none}
+.brand-mark{width:32px;height:32px;flex:none}
+.brand-txt{display:flex;flex-direction:column;line-height:1}
+.brand-name{font-family:var(--f-display);font-weight:900;font-size:18px;letter-spacing:-.035em;color:var(--ink)}
+.brand-sub{font-family:var(--f-mono);font-size:8.5px;font-weight:500;letter-spacing:.3em;color:var(--muted);margin-top:4px}
+
+.nav{display:flex;align-items:center;gap:30px}
+.nav a{
+  font-size:14.5px;font-weight:500;text-decoration:none;color:var(--ink-2);
+  padding:4px 0;position:relative;transition:color .16s ease;
+}
+.nav a::after{
+  content:"";position:absolute;left:0;right:100%;bottom:0;height:1.5px;
+  background:var(--coral);transition:right .22s ease;
+}
+.nav a:hover{color:var(--ink)}
+.nav a:hover::after{right:0}
+.hdr .btn{padding:11px 18px;font-size:14px}
+
+.burger{
+  display:none;width:42px;height:42px;border:1px solid var(--line-strong);
+  background:transparent;border-radius:2px;cursor:pointer;
+  align-items:center;justify-content:center;color:var(--ink);
+}
+.burger span{display:block;width:17px;height:1.8px;background:currentColor;position:relative}
+.burger span::before,.burger span::after{
+  content:"";position:absolute;left:0;width:17px;height:1.8px;background:currentColor;
+  transition:transform .2s ease,top .2s ease;
+}
+.burger span::before{top:-6px}
+.burger span::after{top:6px}
+.burger[aria-expanded="true"] span{background:transparent}
+.burger[aria-expanded="true"] span::before{top:0;transform:rotate(45deg)}
+.burger[aria-expanded="true"] span::after{top:0;transform:rotate(-45deg)}
+
+.mnav{display:none;border-top:1px solid var(--line);background:var(--surface)}
+.mnav[data-open="true"]{display:block}
+.mnav ul{list-style:none;margin:0;padding:8px var(--pad) 22px;display:grid;gap:2px}
+.mnav a{
+  display:block;padding:13px 0;text-decoration:none;color:var(--ink);
+  font-family:var(--f-display);font-weight:600;font-size:17px;
+  border-bottom:1px solid var(--line);
+}
+.mnav .btn{margin-top:16px;width:100%}
+
+/* ---------- hero ---------- */
+.hero{padding-block:clamp(56px,8vw,92px) clamp(64px,9vw,110px);position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:clamp(40px,5vw,64px);align-items:start}
+@media (min-width:940px){.hero-grid{grid-template-columns:1.12fr .88fr;gap:clamp(48px,5vw,80px)}}
+
+.hero h1{
+  font-size:clamp(37px,6.2vw,63px);font-weight:900;letter-spacing:-.035em;
+  margin-bottom:26px;
+}
+.hero h1 em{font-style:normal;color:var(--coral)}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:34px}
+
+.hero-marks{
+  display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:40px;
+  padding-top:24px;border-top:1px solid var(--line);
+  font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--muted);
+}
+.hero-marks span{display:inline-flex;align-items:center;gap:8px}
+.hero-marks span::before{content:"";width:5px;height:5px;background:var(--coral);flex:none}
+
+/* status readout panel */
+.readout{
+  background:var(--surface);border:1px solid var(--line);
+  box-shadow:var(--shadow);padding:26px clamp(20px,3vw,30px);
+  position:relative;overflow:hidden;
+}
+.readout-bg{
+  position:absolute;right:-58px;bottom:-58px;width:236px;height:236px;
+  color:var(--navy);opacity:.07;pointer-events:none;
+}
+.readout-hd{
+  display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding-bottom:16px;margin-bottom:6px;border-bottom:1px solid var(--line);
+  position:relative;
+}
+.readout-hd h2{
+  font-family:var(--f-mono);font-size:11.5px;font-weight:600;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--muted);
+}
+.pulse{display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11.5px;font-weight:600;letter-spacing:.14em;color:var(--coral-ink)}
+.pulse i{width:7px;height:7px;background:var(--coral);border-radius:50%;box-shadow:0 0 0 0 var(--ring);animation:pulse 2.6s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--ring)}70%{box-shadow:0 0 0 9px rgba(255,107,53,0)}100%{box-shadow:0 0 0 0 rgba(255,107,53,0)}}
+
+.readout dl{margin:0;position:relative}
+.readout div{
+  display:flex;align-items:baseline;justify-content:space-between;gap:18px;
+  padding:15px 0;border-bottom:1px solid var(--line);
+}
+.readout div:last-child{border-bottom:0;padding-bottom:0}
+.readout dt{
+  font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);flex:none;
+}
+.readout dd{margin:0;text-align:right;font-size:14.5px;color:var(--ink);font-weight:500}
+.readout dd b{font-family:var(--f-display);font-weight:900;font-size:26px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.readout dd small{display:block;font-family:var(--f-mono);font-size:11.5px;color:var(--muted);letter-spacing:.04em}
+
+/* ---------- about ---------- */
+.about-grid{display:grid;gap:clamp(36px,5vw,60px);grid-template-columns:1fr}
+@media (min-width:900px){.about-grid{grid-template-columns:1fr 1fr}}
+.about-body{display:grid;gap:20px;font-size:16.5px;color:var(--ink-2);max-width:60ch}
+.about-body strong{color:var(--ink);font-weight:600}
+
+.creed{
+  background:var(--ground-2);border:1px solid var(--line);
+  padding:clamp(24px,3.5vw,34px);display:grid;gap:22px;align-content:start;
+}
+.creed h3{font-family:var(--f-mono);font-size:11.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.creed ul{list-style:none;margin:0;padding:0;display:grid;gap:18px}
+.creed li{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;font-size:15.5px;color:var(--ink-2)}
+.creed li b{display:block;color:var(--ink);font-family:var(--f-display);font-weight:700;font-size:16px;margin-bottom:2px;letter-spacing:-.01em}
+.creed li svg{margin-top:4px;color:var(--coral);flex:none}
+
+/* ---------- process (a real sequence — the only numbered section) ---------- */
+.steps{
+  list-style:none;margin:0;padding:0;display:grid;gap:1px;
+  background:var(--line);border:1px solid var(--line);
+}
+@media (min-width:640px){.steps{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1000px){.steps{grid-template-columns:repeat(4,1fr)}}
+.steps li{background:var(--surface);padding:clamp(22px,3vw,30px);display:grid;gap:12px;align-content:start}
+.step-n{
+  font-family:var(--f-mono);font-size:12px;font-weight:600;letter-spacing:.18em;
+  color:var(--coral);display:flex;align-items:center;gap:10px;
+}
+.step-n::after{content:"";height:1px;flex:1;background:var(--line)}
+.steps h3{font-size:20px;font-weight:800}
+.steps p{font-size:14.8px;color:var(--muted);line-height:1.6}
+
+/* ---------- products ---------- */
+.products{display:grid;gap:16px}
+.product{
+  background:var(--surface);border:1px solid var(--line);
+  padding:clamp(22px,3vw,30px);
+  display:grid;gap:18px;grid-template-columns:1fr;
+  transition:border-color .2s ease,transform .2s ease,box-shadow .2s ease;
+}
+@media (min-width:820px){
+  .product{grid-template-columns:1fr 250px;gap:36px;align-items:center}
+}
+.product:hover{border-color:var(--line-strong);box-shadow:var(--shadow)}
+.product-lead{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.product h3{font-size:clamp(21px,2.6vw,26px);font-weight:800}
+.product p{color:var(--muted);font-size:15.5px;max-width:60ch;margin-top:10px}
+
+.chip{
+  display:inline-flex;align-items:center;gap:7px;flex:none;
+  font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;padding:5px 10px;border-radius:2px;
+}
+.chip i{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.chip-live{background:var(--ok-soft);color:var(--ok)}
+.chip-build{background:var(--coral-soft);color:var(--coral-ink)}
+.chip-explore{background:var(--navy-soft);color:var(--navy)}
+
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+.tags span{
+  font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;color:var(--muted);
+  border:1px solid var(--line);padding:4px 9px;border-radius:2px;
+}
+.product-aside{
+  display:grid;gap:10px;padding-top:18px;border-top:1px solid var(--line);
+}
+@media (min-width:820px){
+  .product-aside{padding-top:0;border-top:0;border-left:1px solid var(--line);padding-left:32px}
+}
+.product-aside dt{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.product-aside dd{margin:0;font-size:14.5px;color:var(--ink-2);font-weight:500}
+.product-aside dl{margin:0;display:grid;gap:12px}
+
+.product-link{
+  display:inline-flex;align-items:center;gap:8px;margin-top:20px;
+  font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:-.01em;
+  color:var(--ink);text-decoration:none;
+  padding-bottom:3px;border-bottom:1.5px solid var(--line-strong);
+  transition:color .18s ease,border-color .18s ease;
+}
+.product-link:hover{color:var(--coral-ink);border-color:var(--coral)}
+.product-link svg{flex:none;transition:transform .18s ease}
+.product-link:hover svg{transform:translate(2px,-2px)}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+.more-note{
+  margin-top:22px;display:flex;align-items:center;gap:12px;
+  font-family:var(--f-mono);font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+}
+.more-note::before{content:"";width:28px;height:1px;background:var(--line-strong);flex:none}
+
+/* ---------- services ---------- */
+.services{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
+@media (min-width:660px){.services{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1000px){.services{grid-template-columns:repeat(3,1fr)}}
+.svc{background:var(--surface);padding:clamp(24px,3vw,32px);display:grid;gap:13px;align-content:start;transition:background .2s ease}
+.svc:hover{background:var(--ground-2)}
+.svc-ic{width:30px;height:30px;color:var(--coral)}
+.svc h3{font-size:18.5px;font-weight:800;letter-spacing:-.015em}
+.svc p{font-size:14.8px;color:var(--muted);line-height:1.62}
+.svc ul{list-style:none;margin:4px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.svc li{font-family:var(--f-mono);font-size:10.8px;letter-spacing:.06em;color:var(--muted);background:var(--ground-2);padding:3px 8px;border-radius:2px}
+.svc:hover li{background:var(--ground)}
+
+/* ---------- contact ---------- */
+.contact{background:var(--ground-2)}
+.contact-grid{display:grid;gap:clamp(32px,4vw,52px);grid-template-columns:1fr}
+@media (min-width:900px){.contact-grid{grid-template-columns:.85fr 1.15fr;align-items:start}}
+
+.contact-side{display:grid;gap:26px;align-content:start}
+.contact-side h2{font-size:clamp(30px,4.2vw,44px);font-weight:800}
+.contact-list{display:grid;gap:16px;margin-top:4px}
+.contact-list a,.contact-list span{
+  display:flex;align-items:center;gap:12px;text-decoration:none;
+  font-size:15px;color:var(--ink-2);
+}
+.contact-list a:hover{color:var(--coral-ink)}
+.contact-list svg{color:var(--muted);flex:none}
+
+.form{
+  background:var(--surface);border:1px solid var(--line);
+  padding:clamp(24px,3.4vw,36px);display:grid;gap:18px;box-shadow:var(--shadow);
+}
+.field{display:grid;gap:7px}
+.row2{display:grid;gap:18px;grid-template-columns:1fr}
+@media (min-width:560px){.row2{grid-template-columns:1fr 1fr}}
+label{font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+label .req{color:var(--coral)}
+input,select,textarea{
+  font-family:var(--f-body);font-size:15.5px;color:var(--ink);
+  background:var(--ground);border:1px solid var(--line-strong);border-radius:2px;
+  padding:12px 14px;width:100%;
+  transition:border-color .16s ease,background .16s ease;
+}
+textarea{resize:vertical;min-height:130px;line-height:1.6}
+input::placeholder,textarea::placeholder{color:var(--muted);opacity:.72}
+input:hover,select:hover,textarea:hover{border-color:var(--muted)}
+input:focus,select:focus,textarea:focus{background:var(--surface);border-color:var(--coral);outline-offset:1px}
+select{appearance:none;background-image:none;cursor:pointer}
+.sel{position:relative;display:grid}
+.sel svg{position:absolute;right:13px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--muted)}
+
+.form-foot{display:flex;flex-wrap:wrap;align-items:center;gap:16px;justify-content:space-between;margin-top:2px}
+.form-note{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);letter-spacing:.04em}
+.form-msg{
+  font-size:14.5px;padding:13px 15px;border-radius:2px;border:1px solid;
+  display:flex;gap:10px;align-items:flex-start;
+}
+.form-msg[data-kind="ok"]{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.form-msg[data-kind="err"]{background:var(--coral-soft);border-color:var(--coral);color:var(--coral-ink)}
+.form-msg svg{flex:none;margin-top:2px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* ---------- footer ---------- */
+.ftr{border-top:1px solid var(--line);padding-block:52px 40px;background:var(--ground)}
+.ftr-in{display:grid;gap:34px}
+@media (min-width:760px){.ftr-in{grid-template-columns:1.2fr 1fr;align-items:start}}
+.ftr p{color:var(--muted);font-size:14.5px;max-width:42ch;margin-top:16px}
+.ftr-nav{display:flex;flex-wrap:wrap;gap:10px 28px}
+@media (min-width:760px){.ftr-nav{justify-content:flex-end}}
+.ftr-nav a{font-size:14.5px;color:var(--ink-2);text-decoration:none}
+.ftr-nav a:hover{color:var(--coral-ink)}
+.ftr-btm{
+  margin-top:40px;padding-top:22px;border-top:1px solid var(--line);
+  display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;
+  font-family:var(--f-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+}
+
+/* ---------- mark animation ---------- */
+.mk-ring{stroke-dasharray:245;stroke-dashoffset:245;animation:draw 1.5s cubic-bezier(.65,0,.35,1) .15s forwards}
+.mk-tick{opacity:0;animation:fade .5s ease .95s forwards}
+.mk-node{opacity:0;animation:fade .5s ease 1.2s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fade{to{opacity:1}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+  .mk-ring{stroke-dashoffset:0}
+  .mk-tick,.mk-node{opacity:1}
+}
+html{scroll-behavior:smooth;scroll-padding-top:88px}
+
+@media (max-width:880px){
+  .nav,.hdr .btn{display:none}
+  .burger{display:inline-flex}
+}
+</style>
+</head>
+<body>
+
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ======================= HEADER ======================= -->
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a class="brand" href="#top" aria-label="Nomadic Lab — home">
+      <svg class="brand-mark" viewBox="0 0 82 82" fill="none" aria-hidden="true">
+        <circle cx="40.5" cy="40.5" r="38" stroke="var(--navy)" stroke-width="2.6"/>
+        <g stroke="var(--muted)" stroke-width="3">
+          <path d="M40.5 2.5V20.5M40.5 60.5V78.5M2.5 40.5H20.5M60.5 40.5H78.5"/>
+        </g>
+        <path d="M32.5 47V56.5Q32.5 60.8 36.8 60.8H44.2Q48.5 60.8 48.5 56.5V47" stroke="var(--muted)" stroke-width="2.4" fill="none"/>
+        <g stroke="var(--coral)" stroke-width="1.6"><path d="M34.5 33.2 39 38M46.5 33.2 42 38M40.7 43.5v3"/></g>
+        <rect x="37.6" y="37.4" width="6.2" height="6.2" rx="1" fill="var(--navy)"/>
+        <g fill="var(--coral)"><circle cx="34.2" cy="32.6" r="2.3"/><circle cx="46.8" cy="32.6" r="2.3"/><circle cx="40.7" cy="46.2" r="2.3"/></g>
+      </svg>
+      <span class="brand-txt">
+        <span class="brand-name">Nomadic Lab</span>
+        <span class="brand-sub">AI PROJECTS</span>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Primary">
+      <a href="#about">About</a>
+      <a href="#products">Products</a>
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+    </nav>
+
+    <a class="btn btn-primary" href="#contact">Start a project</a>
+
+    <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="mnav" aria-label="Menu">
+      <span></span>
+    </button>
+  </div>
+
+  <div class="mnav" id="mnav" data-open="false">
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a class="btn btn-primary" href="#contact">Start a project</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+<a id="top"></a>
+
+<!-- ======================= HERO ======================= -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 0v3M6 9v3M0 6h3M9 6h3" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="6" r="1.6" fill="currentColor"/></svg>
+        Independent technology &amp; product studio
+      </p>
+
+      <h1>We build practical AI products that solve <em>real</em> problems.</h1>
+
+      <p class="lede">
+        Nomadic Lab explores ideas across different domains and turns them into useful
+        software — from AI productivity tools and developer solutions to travel and
+        everyday-life applications.
+      </p>
+
+      <div class="hero-cta">
+        <a class="btn btn-primary" href="#products">
+          See our products
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 8h11m-4.5-4.5L13 8l-4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#contact">Start a project</a>
+      </div>
+
+      <p class="hero-marks">
+        <span>Building</span><span>Exploring</span><span>Experimenting</span>
+      </p>
+    </div>
+
+    <!-- studio status readout: the panel is framed like the reticle -->
+    <div class="readout ticked">
+      <svg class="readout-bg" viewBox="0 0 82 82" fill="none" aria-hidden="true">
+        <circle cx="40.5" cy="40.5" r="38" stroke="currentColor" stroke-width="2"/>
+        <path d="M40.5 2.5V20.5M40.5 60.5V78.5M2.5 40.5H20.5M60.5 40.5H78.5" stroke="currentColor" stroke-width="2.4"/>
+      </svg>
+
+      <div class="readout-hd">
+        <h2>Studio status</h2>
+        <span class="pulse"><i></i> ACTIVE</span>
+      </div>
+
+      <dl>
+        <div>
+          <dt>Products live</dt>
+          <dd><b>01</b></dd>
+        </div>
+        <div>
+          <dt>In exploration</dt>
+          <dd><b>03</b></dd>
+        </div>
+        <div>
+          <dt>Domains</dt>
+          <dd>Productivity<small>Developer tools · Travel · Everyday life</small></dd>
+        </div>
+        <div>
+          <dt>Core stack</dt>
+          <dd>Claude API<small>Next.js · React · Node.js · TypeScript</small></dd>
+        </div>
+        <div>
+          <dt>Based in</dt>
+          <dd>Toronto, Canada<small>Working with teams worldwide</small></dd>
+        </div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= ABOUT ======================= -->
+<section class="sec" id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 0v3M6 9v3M0 6h3M9 6h3" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="6" r="1.6" fill="currentColor"/></svg>
+        About us
+      </p>
+      <h2>A small studio with a short distance between idea and product.</h2>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-body">
+        <p>
+          <strong>Nomadic Lab is an independent technology and product studio</strong> focused on
+          building practical AI-powered products that solve real-world problems. We are not
+          chasing demos — we ship software people can open, use, and come back to.
+        </p>
+        <p>
+          The name is the method. We move across domains rather than settling into one:
+          an AI productivity tool one quarter, a developer utility the next, then something
+          for travel or everyday life. Each build teaches us something we carry into the next one.
+        </p>
+        <p>
+          Because the studio is small, there is no handoff between the person who understands
+          the problem and the person writing the code. That keeps the loop short, the scope
+          honest, and the product closer to what it needs to be.
+        </p>
+      </div>
+
+      <div class="creed ticked">
+        <h3>How we work</h3>
+        <ul>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v3.2M7 9.8V13M1 7h3.2M9.8 7H13" stroke="currentColor" stroke-width="1.7"/><circle cx="7" cy="7" r="2" fill="currentColor"/></svg>
+            <span><b>Real problems first</b>If we can't name who is stuck and why, we don't build it.</span>
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v3.2M7 9.8V13M1 7h3.2M9.8 7H13" stroke="currentColor" stroke-width="1.7"/><circle cx="7" cy="7" r="2" fill="currentColor"/></svg>
+            <span><b>Ship small, ship early</b>A working v1 in weeks beats a perfect plan in months.</span>
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v3.2M7 9.8V13M1 7h3.2M9.8 7H13" stroke="currentColor" stroke-width="1.7"/><circle cx="7" cy="7" r="2" fill="currentColor"/></svg>
+            <span><b>AI where it earns its place</b>A language model should remove real work, not decorate the interface.</span>
+          </li>
+          <li>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M7 1v3.2M7 9.8V13M1 7h3.2M9.8 7H13" stroke="currentColor" stroke-width="1.7"/><circle cx="7" cy="7" r="2" fill="currentColor"/></svg>
+            <span><b>Learn in public</b>Every experiment produces something we can reuse — a pattern, a tool, or a clear no.</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= PROCESS ======================= -->
+<section class="sec" id="process">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 0v3M6 9v3M0 6h3M9 6h3" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="6" r="1.6" fill="currentColor"/></svg>
+        Our process
+      </p>
+      <h2>Explore an idea, build it, learn from it, make it better.</h2>
+      <p class="lede">Four steps, then round again. Most products get better on the second pass, not the first.</p>
+    </div>
+
+    <ol class="steps">
+      <li>
+        <span class="step-n">01</span>
+        <h3>Explore</h3>
+        <p>Find a problem worth solving. Talk to the people living with it, map what already exists, and decide whether AI actually helps here.</p>
+      </li>
+      <li>
+        <span class="step-n">02</span>
+        <h3>Build</h3>
+        <p>Get to a working product fast. Real data, real interface, deployed — not a slide deck or a click-through prototype.</p>
+      </li>
+      <li>
+        <span class="step-n">03</span>
+        <h3>Learn</h3>
+        <p>Watch how it's used. Measure what matters, keep what works, and be willing to name the parts that don't.</p>
+      </li>
+      <li>
+        <span class="step-n">04</span>
+        <h3>Improve</h3>
+        <p>Fold the lessons back in. Tighten the prompts, cut the friction, and ship the next version — or carry the insight to the next idea.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ======================= PRODUCTS ======================= -->
+<section class="sec" id="products">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 0v3M6 9v3M0 6h3M9 6h3" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="6" r="1.6" fill="currentColor"/></svg>
+        Our products
+      </p>
+      <h2>What we've shipped, and what's next.</h2>
+      <p class="lede">Each product starts as an experiment. The ones that prove useful keep going.</p>
+    </div>
+
+    <div class="products">
+
+      <article class="product">
+        <div>
+          <div class="product-lead">
+            <h3>AI Job Description Analyzer</h3>
+            <span class="chip chip-live"><i></i>Live</span>
+          </div>
+          <p>
+            Paste in a job posting and get it broken down skill by skill — what the role actually
+            requires, where the gaps are, and ten interview questions drawn from the posting itself.
+            Add your resume and it scores the match and suggests specific edits. Nothing you paste
+            is stored.
+          </p>
+          <div class="tags">
+            <span>Claude API</span><span>Next.js</span><span>Vercel</span>
+          </div>
+
+          <a class="product-link" href="https://ai-job-analyzer-flax.vercel.app/" target="_blank" rel="noopener noreferrer">
+            Try the analyzer
+            <span class="sr">(opens in a new tab)</span>
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3h7v7M13 3 4 12" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+        <div class="product-aside">
+          <dl>
+            <div><dt>Category</dt><dd>AI productivity</dd></div>
+            <div><dt>Privacy</dt><dd>Nothing stored</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="product">
+        <div>
+          <div class="product-lead">
+            <h3>Developer tooling</h3>
+            <span class="chip chip-build"><i></i>In build</span>
+          </div>
+          <p>
+            Small, sharp utilities for the parts of the development day that are still manual —
+            reading unfamiliar codebases, writing the boring tests, keeping documentation honest.
+          </p>
+          <div class="tags">
+            <span>LLM integration</span><span>TypeScript</span><span>CLI</span>
+          </div>
+        </div>
+        <div class="product-aside">
+          <dl>
+            <div><dt>Category</dt><dd>Developer solutions</dd></div>
+            <div><dt>Status</dt><dd>Early build</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="product">
+        <div>
+          <div class="product-lead">
+            <h3>Travel companion</h3>
+            <span class="chip chip-explore"><i></i>Exploring</span>
+          </div>
+          <p>
+            Planning a trip still means twenty open tabs. We're exploring what an assistant looks
+            like when it actually holds your constraints — budget, dates, energy level — instead
+            of listing the same ten attractions.
+          </p>
+          <div class="tags">
+            <span>Research</span><span>Prototype</span>
+          </div>
+        </div>
+        <div class="product-aside">
+          <dl>
+            <div><dt>Category</dt><dd>Travel</dd></div>
+            <div><dt>Status</dt><dd>Discovery</dd></div>
+          </dl>
+        </div>
+      </article>
+
+      <article class="product">
+        <div>
+          <div class="product-lead">
+            <h3>Everyday-life utilities</h3>
+            <span class="chip chip-explore"><i></i>Exploring</span>
+          </div>
+          <p>
+            The small recurring frictions of a normal week — the ones too minor for a startup and
+            too annoying to keep doing by hand. A running list of candidates we're testing one at a time.
+          </p>
+          <div class="tags">
+            <span>Experiments</span><span>Concept</span>
+          </div>
+        </div>
+        <div class="product-aside">
+          <dl>
+            <div><dt>Category</dt><dd>Everyday life</dd></div>
+            <div><dt>Status</dt><dd>Idea backlog</dd></div>
+          </dl>
+        </div>
+      </article>
+
+    </div>
+
+    <p class="more-note">More products and experiments coming soon</p>
+  </div>
+</section>
+
+<!-- ======================= SERVICES ======================= -->
+<section class="sec" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 0v3M6 9v3M0 6h3M9 6h3" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="6" r="1.6" fill="currentColor"/></svg>
+        Services
+      </p>
+      <h2>We build for other teams, too.</h2>
+      <p class="lede">The same approach we use on our own products, pointed at yours.</p>
+    </div>
+
+    <div class="services">
+
+      <div class="svc">
+        <svg class="svc-ic" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="5" y="9" width="22" height="17" rx="2.5" stroke="currentColor" stroke-width="1.9"/>
+          <path d="M16 4v5M11 16h2.5M18.5 16H21M12 21h8" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+          <circle cx="16" cy="3.5" r="1.8" fill="currentColor"/>
+        </svg>
+        <h3>AI product development</h3>
+        <p>End-to-end delivery of an AI-powered product: problem framing, interface, model layer, and the infrastructure to run it.</p>
+        <ul><li>Discovery</li><li>Design</li><li>Build</li><li>Launch</li></ul>
+      </div>
+
+      <div class="svc">
+        <svg class="svc-ic" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M11 10 5 16l6 6M21 10l6 6-6 6M18.5 6 13.5 26" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h3>LLM integration &amp; API engineering</h3>
+        <p>Wiring language models into real applications — prompt design, structured outputs, tool use, retrieval, cost control, and evaluation.</p>
+        <ul><li>Claude API</li><li>RAG</li><li>Evals</li><li>Streaming</li></ul>
+      </div>
+
+      <div class="svc">
+        <svg class="svc-ic" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="4" y="6" width="24" height="20" rx="2.5" stroke="currentColor" stroke-width="1.9"/>
+          <path d="M4 12h24M8.5 9h.01M12 9h.01" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+          <path d="M10 17.5h6M10 21h10" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+        </svg>
+        <h3>Full-stack web applications</h3>
+        <p>Production web apps built to be maintained — typed, tested, and structured so the next developer isn't guessing.</p>
+        <ul><li>React</li><li>Angular</li><li>Node.js</li><li>TypeScript</li></ul>
+      </div>
+
+      <div class="svc">
+        <svg class="svc-ic" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M16 3c4.5 3.6 6.8 8 6.8 13.2 0 3.6-2.3 8-6.8 12.3-4.5-4.3-6.8-8.7-6.8-12.3C9.2 11 11.5 6.6 16 3Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/>
+          <circle cx="16" cy="14.5" r="3" stroke="currentColor" stroke-width="1.9"/>
+        </svg>
+        <h3>Rapid prototyping &amp; MVPs</h3>
+        <p>An idea turned into something people can actually try, fast enough that the answer still matters.</p>
+        <ul><li>Scoping</li><li>Prototype</li><li>MVP</li><li>User testing</li></ul>
+      </div>
+
+      <div class="svc">
+        <svg class="svc-ic" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <path d="M9 22a5.5 5.5 0 0 1-.6-11A7.5 7.5 0 0 1 23 11.6 5.2 5.2 0 0 1 22.5 22" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 15v11m0 0-3.5-3.5M16 26l3.5-3.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <h3>Cloud, CI/CD &amp; deployment</h3>
+        <p>Getting the product off a laptop and into a pipeline that deploys reliably, with monitoring you can trust.</p>
+        <ul><li>AWS</li><li>Azure</li><li>GitHub Actions</li><li>Jenkins</li></ul>
+      </div>
+
+      <div class="svc">
+        <svg class="svc-ic" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <circle cx="16" cy="16" r="12" stroke="currentColor" stroke-width="1.9"/>
+          <path d="M16 4v5M16 23v5M4 16h5M23 16h5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/>
+          <circle cx="16" cy="16" r="3.2" fill="currentColor"/>
+        </svg>
+        <h3>Technical consulting</h3>
+        <p>A second opinion on architecture, model choice, or scope — including an honest read on whether AI belongs in the feature at all.</p>
+        <ul><li>Architecture</li><li>Code review</li><li>AI strategy</li></ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ======================= CONTACT ======================= -->
+<section class="sec contact" id="contact">
+  <div class="wrap contact-grid">
+
+    <div class="contact-side">
+      <div>
+        <p class="eyebrow">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6 0v3M6 9v3M0 6h3M9 6h3" stroke="currentColor" stroke-width="1.6"/><circle cx="6" cy="6" r="1.6" fill="currentColor"/></svg>
+          Contact us
+        </p>
+        <h2>Have an idea worth building?</h2>
+      </div>
+
+      <p class="lede">
+        Tell us what problem you're trying to solve. If it's a fit, you'll hear back
+        within two business days with honest next steps — including if we think you
+        don't need us.
+      </p>
+
+      <div class="contact-list">
+        <a href="mailto:silencenomadic@gmail.com">
+          <svg width="17" height="17" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="1.5" y="3.5" width="15" height="11" rx="1.6" stroke="currentColor" stroke-width="1.5"/><path d="m2.5 5 6.5 4.6L15.5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          silencenomadic@gmail.com
+        </a>
+        <a href="https://www.linkedin.com/company/nomadic-lab" target="_blank" rel="noopener noreferrer">
+          <svg width="17" height="17" viewBox="0 0 18 18" fill="none" aria-hidden="true"><rect x="1.5" y="1.5" width="15" height="15" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M5.2 7.6v5.2M5.2 5.1v.01M8.6 12.8V7.6m0 1.6c0-1 .8-1.7 1.8-1.7s1.8.7 1.8 1.9v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Nomadic Lab on LinkedIn
+        </a>
+        <span>
+          <svg width="17" height="17" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M9 1.8c2.6 2 3.9 4.6 3.9 7.5 0 2-1.3 4.5-3.9 7-2.6-2.5-3.9-5-3.9-7 0-2.9 1.3-5.5 3.9-7.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="9" cy="8" r="1.7" stroke="currentColor" stroke-width="1.5"/></svg>
+          Toronto, Canada — working remotely worldwide
+        </span>
+      </div>
+    </div>
+
+    <form class="form ticked" id="contactForm" method="POST" action="https://formspree.io/f/myeynlda" novalidate>
+      <div class="row2">
+        <div class="field">
+          <label for="f-name">Name <span class="req" aria-hidden="true">*</span></label>
+          <input id="f-name" name="name" type="text" autocomplete="name" required placeholder="Your name">
+        </div>
+        <div class="field">
+          <label for="f-email">Email <span class="req" aria-hidden="true">*</span></label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required placeholder="you@company.com">
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label for="f-org">Company <span style="text-transform:none;letter-spacing:0">(optional)</span></label>
+          <input id="f-org" name="company" type="text" autocomplete="organization" placeholder="Company or project">
+        </div>
+        <div class="field">
+          <label for="f-type">What do you need?</label>
+          <span class="sel">
+            <select id="f-type" name="project_type">
+              <option>AI product development</option>
+              <option>LLM integration &amp; API engineering</option>
+              <option>Full-stack web application</option>
+              <option>Rapid prototype or MVP</option>
+              <option>Cloud, CI/CD &amp; deployment</option>
+              <option>Technical consulting</option>
+              <option>Something else</option>
+            </select>
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="m2.5 4.5 3.5 3.5 3.5-3.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-msg">Project details <span class="req" aria-hidden="true">*</span></label>
+        <textarea id="f-msg" name="message" required placeholder="What are you trying to build, who is it for, and what's the rough timeline?"></textarea>
+      </div>
+
+      <div class="hp" aria-hidden="true">
+        <label for="f-hp">Leave this field empty</label>
+        <input id="f-hp" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+      </div>
+
+      <div class="form-foot">
+        <p class="form-note">Replies within 2 business days</p>
+        <button class="btn btn-primary" type="submit" id="submitBtn">
+          Send message
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 8h11m-4.5-4.5L13 8l-4.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+
+      <p class="form-msg" id="formMsg" role="status" aria-live="polite" hidden></p>
+    </form>
+
+  </div>
+</section>
+
+</main>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr-in">
+      <div>
+        <a class="brand" href="#top" aria-label="Nomadic Lab — back to top">
+          <svg class="brand-mark" viewBox="0 0 82 82" fill="none" aria-hidden="true">
+            <circle class="mk-ring" cx="40.5" cy="40.5" r="38" stroke="var(--navy)" stroke-width="2.6"/>
+            <g class="mk-tick" stroke="var(--muted)" stroke-width="3">
+              <path d="M40.5 2.5V20.5M40.5 60.5V78.5M2.5 40.5H20.5M60.5 40.5H78.5"/>
+            </g>
+            <path class="mk-tick" d="M32.5 47V56.5Q32.5 60.8 36.8 60.8H44.2Q48.5 60.8 48.5 56.5V47" stroke="var(--muted)" stroke-width="2.4" fill="none"/>
+            <g class="mk-node" stroke="var(--coral)" stroke-width="1.6"><path d="M34.5 33.2 39 38M46.5 33.2 42 38M40.7 43.5v3"/></g>
+            <rect class="mk-node" x="37.6" y="37.4" width="6.2" height="6.2" rx="1" fill="var(--navy)"/>
+            <g class="mk-node" fill="var(--coral)"><circle cx="34.2" cy="32.6" r="2.3"/><circle cx="46.8" cy="32.6" r="2.3"/><circle cx="40.7" cy="46.2" r="2.3"/></g>
+          </svg>
+          <span class="brand-txt">
+            <span class="brand-name">Nomadic Lab</span>
+            <span class="brand-sub">AI PROJECTS</span>
+          </span>
+        </a>
+        <p>Building. Exploring. Experimenting. An independent studio turning ideas into AI-powered products.</p>
+      </div>
+
+      <nav class="ftr-nav" aria-label="Footer">
+        <a href="#about">About</a>
+        <a href="#products">Products</a>
+        <a href="#services">Services</a>
+        <a href="#process">Process</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+
+    <div class="ftr-btm">
+      <span>© 2026 Nomadic Lab</span>
+      <span>Toronto, Canada</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ---- mobile menu ---- */
+  var burger = document.getElementById("burger");
+  var mnav = document.getElementById("mnav");
+
+  function setMenu(open) {
+    burger.setAttribute("aria-expanded", String(open));
+    mnav.setAttribute("data-open", String(open));
+  }
+  burger.addEventListener("click", function () {
+    setMenu(burger.getAttribute("aria-expanded") !== "true");
+  });
+  mnav.addEventListener("click", function (e) {
+    if (e.target.closest("a")) setMenu(false);
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && burger.getAttribute("aria-expanded") === "true") {
+      setMenu(false);
+      burger.focus();
+    }
+  });
+  window.addEventListener("resize", function () {
+    if (window.innerWidth > 880) setMenu(false);
+  });
+
+  /* ---- contact form ----------------------------------------------------
+     TO ACTIVATE: create a free form at https://formspree.io, then replace
+     YOUR_FORM_ID in the <form action="..."> attribute above with your own
+     endpoint (it looks like https://formspree.io/f/abcdwxyz).
+     Getform, Basin and Web3Forms endpoints work here unchanged too.
+     Until then the form validates and reports that it isn't connected yet.
+     --------------------------------------------------------------------- */
+  var form = document.getElementById("contactForm");
+  var msg = document.getElementById("formMsg");
+  var btn = document.getElementById("submitBtn");
+
+  var ICON_OK  = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 8.5 3.2 3.2L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ICON_ERR = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.7"/><path d="M8 4.8v4M8 11.1v.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+
+  function say(kind, text) {
+    msg.hidden = false;
+    msg.setAttribute("data-kind", kind);
+    msg.innerHTML = (kind === "ok" ? ICON_OK : ICON_ERR) + "<span>" + text + "</span>";
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    var name = form.querySelector("#f-name");
+    var email = form.querySelector("#f-email");
+    var body = form.querySelector("#f-msg");
+
+    if (!name.value.trim()) { say("err", "Please add your name so we know who we're replying to."); name.focus(); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())) { say("err", "That email address doesn't look right — check it and try again."); email.focus(); return; }
+    if (body.value.trim().length < 12) { say("err", "Tell us a little more about the project so we can give you a useful answer."); body.focus(); return; }
+
+    var action = form.getAttribute("action") || "";
+    if (!action || action.indexOf("YOUR_FORM_ID") !== -1) {
+      console.warn("[Nomadic Lab] Contact form is not wired up: replace YOUR_FORM_ID in the <form action=\"...\"> attribute with your Formspree endpoint.");
+      say("err", "We can't take messages through this form right now. Please email silencenomadic@gmail.com and we'll get straight back to you.");
+      return;
+    }
+
+    btn.disabled = true;
+    var label = btn.innerHTML;
+    btn.textContent = "Sending…";
+    msg.hidden = true;
+
+    fetch(action, {
+      method: "POST",
+      body: new FormData(form),
+      headers: { Accept: "application/json" }
+    })
+      .then(function (r) {
+        if (!r.ok) throw new Error("bad status");
+        form.reset();
+        say("ok", "Thanks — your message is on its way. We'll reply within two business days.");
+      })
+      .catch(function () {
+        say("err", "We couldn't send that just now. Please try again, or email silencenomadic@gmail.com directly.");
+      })
+      .then(function () {
+        btn.disabled = false;
+        btn.innerHTML = label;
+      });
+  });
+})();
+</script>
+
+</body>
+</html>
